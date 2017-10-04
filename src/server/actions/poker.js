@@ -360,17 +360,19 @@ export default {
         this.actions["merge.array"](scenario).then(resolve, reject);
       };
 
-      this.sendAction("poker", "deal").then((payload) => {
-        if (!payload.card_list) {
-          this.sendAction("poker", "initialize").then((payload) => {
-            console.log("From initialize model");
+      setTimeout(() => {
+        this.sendAction("poker", "deal").then((payload) => {
+          if (!payload.card_list) {
+            this.sendAction("poker", "initialize").then((payload) => {
+              console.log("From initialize model");
+              processCards(payload);
+            }, reject);
+          } else {
+            console.log("From deal model");
             processCards(payload);
-          }, reject);
-        } else {
-          console.log("From deal model");
-          processCards(payload);
-        }
-      }, reject);
+          }
+        }, reject);
+      }, 1000);
     });
   },
   "poker.double": function() {
