@@ -4,6 +4,8 @@ import shortid from "shortid";
 import SocketIO from "socket.io";
 import Express from "express";
 import bodyParser from "body-parser";
+
+import isObject from "lodash/isObject";
 import forEach from "lodash/forEach";
 import assign from "lodash/assign";
 import noop from "lodash/noop";
@@ -189,7 +191,11 @@ export default class Server {
   }
 
   sendAction(realSocket, actionName, payload, timeout) {
-    timeout = timeout || this.timeout;
+    timeout = !isObject(timeout) ? {
+      stopOnTimeout: true,
+      timeoutInMs: timeout
+    } : timeout;
+    timeout.timeoutInMs = timeout.timeoutInMs || this.timeout;
     return new Promise((resolve, reject) => {
       var resolved = false;
       const id = shortid.generate();
@@ -217,19 +223,26 @@ export default class Server {
           reject(payload);
           done();
         },
-        timer: timeout > 0 ? setTimeout(() => {
-          if (!resolved) {
-            this.stopSocket(realSocket.id).then(() => {
-              reject(new Error(`Action ${expression} timed out!`));
-            }, reject);
+        timer: timeout.timeoutInMs > 0 ? setTimeout(() => {
+          if (resolved) {
+            done();
             return;
           }
-          done();
-        }, timeout) : 0
+
+          const cb = () => {
+            reject(new Error(`Action ${expression} timed out after ${timeout.timeoutInMs}ms!`));
+          };
+          if (timeout.stopOnTimeout) {
+            this.stop().then(cb, cb);
+          } else {
+            cb();
+          }
+        }, timeout.timeoutInMs) : 0
       };
 
       const data = {
-        id, payload, timeout,
+        id, payload, 
+        timeout: timeout.timeoutInMs,
         action: actionName, 
         type: "request"
       };

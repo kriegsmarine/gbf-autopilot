@@ -30,7 +30,10 @@ const actions = _.assign({
       selector,
       scroll: false,
       retry: true
-    }, timeout);
+    }, {
+      stopOnTimeout: false,
+      timeoutInMs: timeout
+    });
   },
   "run": function(callback) {
     return new Promise((resolve, reject) => {

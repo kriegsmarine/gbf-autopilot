@@ -232,7 +232,7 @@ export default {
         ).then(resolve, reject);
       }, (err) => {
         this.logger.debug("Not in battle: " + err);
-        resolve();
+        reject();
       });
     });
   },
