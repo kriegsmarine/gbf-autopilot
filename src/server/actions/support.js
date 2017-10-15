@@ -23,6 +23,7 @@ const battleSelector = [
 ];
 
 export const waitBattleScreen = [
+  "location.wait",
   ["timeout", 3000],
   ["wait", battleSelector.join(","), (next, actions) => {
     const checkButton = ["check", ".btn-usual-ok", (next, actions) => {

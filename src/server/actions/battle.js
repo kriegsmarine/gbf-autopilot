@@ -93,6 +93,7 @@ export default {
           ["check", ".btn-result", (next, actions, {selector}) => {
             actions.merge(
               ["click", selector],
+              "location.wait",
               ["merge", check]
             ).then(next);
           }, (next, actions) => {

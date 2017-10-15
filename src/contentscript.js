@@ -4,6 +4,7 @@ import PortMessaging from "./lib/messaging/PortMessaging";
 import shortid from "shortid";
 
 const token = shortid.generate();
+const hashSubscribers = new Set();
 const channel = new MessageChannel();
 const port = new PortMessaging();
 port.middleware("receive", (evt, next, fail) => {
@@ -50,7 +51,7 @@ const handleRequest = (request, sendResponse) => {
   callHandler = () => {
     if (handler) {
       return handler.call({
-        actions, requestExternal
+        actions, requestExternal, hashSubscribers
       }, payload, done, fail, retry);
     } else {
       return new Error("Action '" + action + "' not found!");
@@ -111,3 +112,6 @@ const portSetup = () => {
 };
 
 window.addEventListener("load", portSetup);
+window.addEventListener("hashchange", (evt) => {
+  hashSubscribers.forEach((subscriber) => subscriber(evt));
+});

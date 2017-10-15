@@ -132,6 +132,8 @@ export default class Worker {
     const successCallback = handleCallback(success);
     const errorCallback = handleCallback(error || ((next, actions, err) => {
       this.logger.error(err);
+      this.scenario(this.initialScenario);
+      next();
     }));
 
     if (this.running) {
