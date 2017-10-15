@@ -79,6 +79,7 @@ export default {
       return ["check", ".btn-result", (next, command, {selector}) => {
         command.merge(
           ["click", selector],
+          "location.wait",
           ["timeout", 1500],
           ["merge", check]
         ).then(next);
