@@ -8,14 +8,17 @@ export default {
     const goToPending = ["merge", [
       ["location.change", "#quest/assist/unclaimed"], ["timeout", 1000],
     ]];
-    const pending = ["check", ".btn-multi-raid.lis-raid", (next, actions, {selector}) => {
-      actions.merge(
-        ["click", selector],
-        ["wait", ".btn-usual-ok,.btn-control"], ["timeout", 1000],
-        ["click", ".btn-usual-ok,.btn-control"], ["timeout", 1000],
-        goToPending, pending
-      ).then(next);
-    }, nextHandler];
+    const pending = ["merge", [
+      ["wait", ".atx-lead-link"],
+      ["check", ".btn-multi-raid.lis-raid", (next, actions, {selector}) => {
+        actions.merge(
+          ["click", selector],
+          ["wait", ".btn-usual-ok,.btn-control"], ["timeout", 1000],
+          ["click", ".btn-usual-ok,.btn-control"], ["timeout", 1000],
+          goToPending, pending
+        ).then(next);
+      }, nextHandler]
+    ]];
 
     return new Promise((resolve, reject) => {
       raidQueue.pop(() => {
@@ -31,7 +34,11 @@ export default {
         if (result.indexOf("provide backup") >= 0) {
           return this.actions.timeout(Number(this.config.Raid.BackupTimeoutInMs || 30000));
         } else if (result.indexOf("pending") >= 0) {
-          return this.actions.merge(goToPending, pending);
+          return this.actions.merge(
+            ["timeout", 3000],
+            goToPending, 
+            pending
+          );
         } else {
           return this.actions.timeout(3000);
         }
