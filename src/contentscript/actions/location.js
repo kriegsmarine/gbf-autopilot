@@ -12,10 +12,8 @@ export default {
     return window.location;
   },
   "location.change": function(hash, done) {
-    oneTimeSubscribe(this, () => {
-      done("OK");
-    });
     window.location.hash = hash;
+    window.setTimeout(() => done("OK"), 1000);
   },
   "location.reload": function(payload, done) {
     window.location.reload();

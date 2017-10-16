@@ -35,7 +35,6 @@ export default {
           return this.actions.timeout(Number(this.config.Raid.BackupTimeoutInMs || 30000));
         } else if (result.indexOf("pending") >= 0) {
           return this.actions.merge(
-            ["timeout", 3000],
             goToPending, 
             pending
           );
