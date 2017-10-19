@@ -228,8 +228,17 @@ export default {
   "battle.logic": function(callback) {
     return new Promise((resolve, reject) => {
       this.callAction("battle.state").then((state) => {
+        const nextScenario = callback(state);
+        if (!nextScenario) {
+          resolve();
+          return;
+        } else if (nextScenario instanceof Error) {
+          reject(nextScenario);
+          return;
+        }
+
         this.actions.merge(
-          ["merge", callback(state)],
+          ["merge", nextScenario],
           ["battle.logic", callback]
         ).then(resolve, reject);
       }, (err) => {
