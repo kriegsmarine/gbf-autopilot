@@ -54,13 +54,16 @@ export default class Chatbot extends BaseExtension {
     });
   }
 
-  onChatConnect() {}
+  onChatConnect() {
+    this.server.logger.debug("Chatbot connected!");
+  }
 
   onChatEvents(events) {
     forEach(events, ::this.onChatEvent);
   }
 
   onChatEvent(event) {
+    console.log("yaho");
     if (event.type !== "message") return;
     if (event.message.type !== "text") return;
     const text = event.message.text;

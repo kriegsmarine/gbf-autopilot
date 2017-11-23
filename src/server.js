@@ -232,11 +232,14 @@ export default class Server {
           const cb = () => {
             reject(new Error(`Action ${expression} timed out after ${timeout.timeoutInMs}ms!`));
           };
+          cb();
+          /*
           if (timeout.stopOnTimeout) {
             this.stop().then(cb, cb);
           } else {
             cb();
           }
+          */
         }, timeout.timeoutInMs) : 0
       };
 

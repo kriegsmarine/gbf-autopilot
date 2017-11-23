@@ -247,6 +247,14 @@ export default {
       });
     });
   },
+  "battle.retreat": function() {
+    return this.actions.merge(
+      ["click", ".btn-raid-menu.menu"], ["timeout", 1500],
+      ["click", ".btn-withdrow.btn-red-m"], ["timeout", 1500],
+      ["click", ".btn-usual-ok"],
+      ["click", ".btn-result"]
+    );
+  },
 
   // Extras
   "battle.state": battleState,

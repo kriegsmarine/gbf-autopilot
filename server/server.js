@@ -3,6 +3,10 @@ const resolve = require("path").resolve;
 const ini = require("ini");
 const Server = require("./dist/server").default;
 
+// requirements for babel on-the-fly transpiling
+require("babel-register");
+require("babel-polyfill");
+
 const readConfig = () => {
   const content = fs.readFileSync(resolve(__dirname, "./config.ini"), "utf-8");
   const config = ini.parse(content);
