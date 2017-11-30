@@ -2,6 +2,7 @@ import _ from "lodash";
 import {executeClick} from "./click";
 
 const nextHandler = (next) => next();
+const popupDelay = 1500;
 
 export const elementIds = {
   "fire": 1,
@@ -78,12 +79,13 @@ export default {
             return;
           }
           actions.merge(
-            ["timeout", 500],
+            ["timeout", popupDelay],
             ["click", ".btn-use-full.index-1"],
+            ["timeout", popupDelay],
             ["click", ".btn-usual-ok"]
           ).then(next);
         }, next);
-      }, nextHandler],
+      }],
       ["click", ".icon-supporter-type-" + elementId],
       ["support", summonIds],
       ["wait", ".se-quest-start"],
@@ -93,18 +95,18 @@ export default {
           ["check", ".btn-select-group.id-" + group + ".selected", nextHandler, (next, actions) => {
             actions.merge(
               ["click", ".btn-select-group.id-" + group],
-              ["timeout", 500]
+              ["timeout", popupDelay]
             ).then(next);
           }],
           ["check", ".prt-deck-slider ol > li:nth-child(" + slot + ") > a.flex-active", nextHandler, (next, actions) => {
             actions.merge(
               ["click", ".prt-deck-slider ol > li:nth-child(" + slot + ")"],
-              ["timeout", 500]
+              ["timeout", popupDelay]
             ).then(next);
           }]
         ).then(next);
       }, nextHandler],
-      ["timeout", 500],
+      ["timeout", popupDelay],
       ["click", ".se-quest-start"],
       ["merge", waitBattleScreen]
     );
