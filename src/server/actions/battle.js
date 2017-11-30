@@ -228,11 +228,11 @@ export default {
   "battle.logic": function(callback) {
     return new Promise((resolve, reject) => {
       this.callAction("battle.state").then((state) => {
+        var nextScenario;
         try {
-          const nextScenario = callback(state);
-        } catch (err) {
-          reject(err);
-          return;
+          nextScenario = callback(state);
+        } catch (e) {
+          nextScenario = e;
         }
 
         if (!nextScenario) {
