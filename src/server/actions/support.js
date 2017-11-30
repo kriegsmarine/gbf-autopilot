@@ -130,7 +130,7 @@ export default {
       const selectorNext = index + 1 < selector.length ? selector[index + 1] : supportScreenSelector;
       actions.check(selectorNext).then(() => {
         actions.merge(
-          ["timeout", 500],
+          ["timeout", popupDelay],
           checker
         ).then(() => {
           index++;
@@ -140,7 +140,7 @@ export default {
         actions.check(selectorCurrent).then(() => {
           actions.merge(
             ["click", selectorCurrent],
-            ["timeout", 500],
+            ["timeout", popupDelay],
             checker
           ).then(next);
         }, next);
